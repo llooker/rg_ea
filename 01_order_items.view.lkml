@@ -63,21 +63,47 @@ view: order_items {
 
   dimension: sale_price {
     type: number
+    value_format_name: usd
     sql: ${TABLE}.sale_price ;;
   }
 
-  dimension_group: shipped {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.shipped_at ;;
+  dimension: gross_margin {
+    type: number
+    value_format_name: usd
+    sql:  ${sale_price} - ${inventory_items.cost};;
+  }
+
+  measure: total_sale_price {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+  }
+
+  measure: total_gross_margin {
+    type: sum
+    value_format_name: usd
+    sql: ${gross_margin} ;;
+  }
+
+  measure: average_sale_price {
+    type: average
+    value_format_name: usd
+    sql: ${sale_price} ;;
+  }
+
+  dimension: reporting_period {
+    group_label: "Order Date"
+    sql: CASE
+        WHEN date_part('year',${created_raw}) = date_part('year',current_date)
+        AND ${created_raw} < CURRENT_DATE
+        THEN 'This Year to Date'
+
+        WHEN date_part('year',${created_raw}) + 1 = date_part('year',current_date)
+        AND date_part('dayofyear',${created_raw}) <= date_part('dayofyear',current_date)
+        THEN 'Last Year to Date'
+
+      END
+       ;;
   }
 
   dimension: status {

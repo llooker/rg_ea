@@ -4,8 +4,8 @@ connection: "demonew_events_ecommerce"
 include: "*.view"
 
 datagroup: rg_ea_project_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+  sql_trigger: SELECT max(completed_at) from ecomm.etl_jobs;;
+  max_cache_age: "24 hours"
 }
 
 persist_with: rg_ea_project_default_datagroup

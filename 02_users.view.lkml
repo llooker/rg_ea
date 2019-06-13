@@ -7,9 +7,33 @@ view: users {
     sql: ${TABLE}.id ;;
   }
 
+  dimension: first_name {
+    hidden: yes
+    type: string
+    sql: INITCAP(${TABLE}.first_name) ;;
+  }
+
+  dimension: last_name {
+    hidden: yes
+    type: string
+    sql: INITCAP(${TABLE}.last_name) ;;
+  }
+
+  dimension: name {
+    sql: ${first_name} || ' ' || ${last_name} ;;
+  }
+
+
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: age_tier {
+    type: tier
+    tiers: [0, 10, 20, 30, 40, 50, 60, 70]
+    style: integer
+    sql: ${age} ;;
   }
 
   dimension: city {
@@ -42,20 +66,14 @@ view: users {
     sql: ${TABLE}.email ;;
   }
 
-  dimension: first_name {
-    type: string
-    sql: ${TABLE}.first_name ;;
-  }
+
 
   dimension: gender {
     type: string
     sql: ${TABLE}.gender ;;
   }
 
-  dimension: last_name {
-    type: string
-    sql: ${TABLE}.last_name ;;
-  }
+
 
   dimension: latitude {
     type: number

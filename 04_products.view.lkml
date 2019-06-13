@@ -7,9 +7,14 @@ view: products {
     sql: ${TABLE}.id ;;
   }
 
+  dimension: item_name {
+    type: string
+    sql: TRIM(${TABLE}.name) ;;
+  }
+
   dimension: brand {
     type: string
-    sql: ${TABLE}.brand ;;
+    sql: TRIM(${TABLE}.brand) ;;
   }
 
   dimension: category {
@@ -33,10 +38,7 @@ view: products {
     sql: ${TABLE}.distribution_center_id ;;
   }
 
-  dimension: name {
-    type: string
-    sql: ${TABLE}.name ;;
-  }
+
 
   dimension: retail_price {
     type: number
@@ -50,6 +52,6 @@ view: products {
 
   measure: count {
     type: count
-    drill_fields: [id, name, distribution_centers.id, distribution_centers.name, inventory_items.count]
+    drill_fields: [id, item_name, distribution_centers.id, distribution_centers.name, inventory_items.count]
   }
 }
